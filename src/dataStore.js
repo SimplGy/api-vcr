@@ -21,15 +21,17 @@
   };
 
   save = function(httpRequest, data) {
-    var finalResource, path, pathComponents, route;
+    var contents, file, finalResource, path, pathComponents, route;
     console.log('dataStore.save()', {
       headers_host: httpRequest.headers.host,
       hostname: httpRequest.hostname,
-      path: httpRequest.path,
       originalUrl: httpRequest.originalUrl,
       method: httpRequest.method,
       data: data
     });
+    if (!config.record) {
+      return console.error("dataStore.save() doesn't work if you haven't configured a `record` server");
+    }
     pathComponents = [config.rootPath, config.record.split(':')[0], config.record.split(':')[1] || 80];
     route = httpRequest.path.split('/');
     if (route[0] === '') {
@@ -39,9 +41,18 @@
     finalResource = pathComponents.pop();
     path = pathComponents.join('/');
     console.log("Make a deep path: ", path);
-    return fs.mkdirRecursive(path, function(err) {
+    fs.mkdirRecursive(path, function(err) {
       if (err) {
         return console.warn("Couldn't make dir [" + path + "]", err);
+      }
+    });
+    file = "" + path + "/" + finalResource + ".json";
+    console.log("Create file: ", file);
+    contents = JSON.stringify(data, null, 2);
+    console.log("...with contents: ", contents);
+    return fs.writeFile(file, contents, function(err) {
+      if (err) {
+        return console.log("Couldn't write file [" + file + "]", err);
       }
     });
   };

@@ -18,55 +18,39 @@ readFile = (file) ->
 #  console.warn "No file found named: `#{file}`" unless contents
   JSON.parse contents # TODO: be more robust about handling JSON.parse fails
 
-# Make a folder. If it already exists, that's ok.
-#makeFolderThatMightExist = (path, cb) ->
-#  fs.mkdir path, null, (err) ->
-#    if err and err.code isnt 'EEXIST'
-#      console.warn "Error making path: #{path}", err
-#    else
-      # ignore the error if the folder already exists or there was no error
-
-#makeDeepPath = (arr, path) ->
-#  if arr.length is 0
-#    return path
-#  else
-#    if path
-#      path += '/'
-#    else
-#      path = ''
-#    path += arr.shift()
-#    console.log "Make folder", path
-#    makeFolderThatMightExist path, (err) ->
-#    makeDeepPath arr, path
-
 
 # Given an api request and a data object, persist the data object to disk, or update the existing object
 save = (httpRequest, data) ->
   console.log 'dataStore.save()',
     headers_host: httpRequest.headers.host
     hostname: httpRequest.hostname
-    path: httpRequest.path
     originalUrl: httpRequest.originalUrl
     method: httpRequest.method
     data: data
 
-  # Build folder tree `hostname/port/path/to/id`
+  return console.error "dataStore.save() doesn't work if you haven't configured a `record` server" unless config.record
+
+  # Build a deep folder path like `hostname/port/path/to/id`
   pathComponents = [
     config.rootPath
     config.record.split(':')[0]
     config.record.split(':')[1] || 80
   ]
-#  console.log 'httpRequest path bits', httpRequest.path.split '/'
   route = httpRequest.path.split '/'
   if route[0] is '' then route.shift() # because the route can start with a '/', need to shift it off
   Array.prototype.push.apply pathComponents, route
   finalResource = pathComponents.pop() # the last element is the actual resource list or id requested
-#  console.log "make path from these components", pathComponents
-#  console.log "made full path", makeDeepPath pathComponents
 
   path = pathComponents.join '/'
   console.log "Make a deep path: ", path
   fs.mkdirRecursive path, (err) -> if err then console.warn "Couldn't make dir [#{path}]", err
+
+  file = "#{path}/#{finalResource}.json"
+  console.log "Create file: ", file
+  contents = JSON.stringify data, null, 2
+  console.log "...with contents: ", contents
+  fs.writeFile file, contents, (err) -> if err then console.log "Couldn't write file [#{file}]", err
+
 
 #  fs.mkdir './data/foo/bar'
 

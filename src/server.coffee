@@ -54,7 +54,7 @@ record = (api) ->
         console.warn "unable to parse JSON response from API server",
           req_path: req.path
           data: data
-        callback 42, data
+        callback null, data
 
 #    forwardPath: (req, res) -> url.parse(req.url).path
 #    intercept: (data, req, res, callback) ->

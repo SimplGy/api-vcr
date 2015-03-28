@@ -65,7 +65,7 @@
             req_path: req.path,
             data: data
           });
-          return callback(42, data);
+          return callback(null, data);
         }
       }
     }));
