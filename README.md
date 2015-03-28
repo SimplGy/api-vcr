@@ -17,12 +17,15 @@ It uses folders to determine the api path it should respond to. If you'd like th
 
     data/users/1.json
 
-## Recording Data
+## Running
 
-To record data from an API server, start the app this way:
+If you'd like to run in live record mode, which proxies requests to your API server and records the responses for later playback, run this command:
 
-    node start.js --record=http://api.foo.com
+    node record.js http://api.magicalsailboat.com
 
+If you'd like to run in offline playback mode, which serves up prerecorded data, run this command:
+
+    node serve.js
 
 ## TODO
 

@@ -1,12 +1,10 @@
 # Includes
-express   = require 'express'
-http      = require 'http'
-dataStore = require './dataStore'
-recorder  = require './responseRecorder'
-
-# Config
-#defaultPath = './data'
-port = 59007
+express      = require 'express'
+http         = require 'http'
+dataStore    = require './dataStore'
+recorder     = require './responseRecorder'
+fileScanner  = require './fileScanner'
+config       = require './config'
 
 
 onError =(error) -> if (error.syscall isnt 'listen') then throw error;
@@ -19,11 +17,6 @@ proxyRequestAndRecordResponse = (req, res, next) ->
   console.log "record"
   next()
 
-fetchDataForRequest = (req, res, next) ->
-  console.log "Request received: #{req.method} #{req.path}"
-  data = dataStore[req.method] req.path
-  if data then res.send data
-  next()
 
 
 
@@ -34,15 +27,17 @@ Server = ->
 
 Server.prototype =
 
-  start: ->
+  start: (port) ->
     @app = express()
     @app.use proxyRequestAndRecordResponse
-    @app.use fetchDataForRequest
+    @app.use dataStore.fetchDataForRequest
     console.log "Starting express server"
     @server = http.createServer @app
-    @server.listen port
+    @server.listen port || config.defaultPort
     @server.on 'error', onError
     @server.on 'listening', onListening.bind @
+#    console.log "Found the following JSON data: ", JSON.stringify fileScanner.get(), null, 2
+
 
 
 

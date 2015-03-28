@@ -1,3 +1,4 @@
+# This script starts the project in `record` mode, which proxies requests to a specified API server and records the responses as they come back
 
 server = require './src/server.js'
 
