@@ -1,5 +1,4 @@
-http  = require 'http'
-https = require 'https'
+proxy = require 'express-http-proxy'
 
 
 
@@ -20,21 +19,23 @@ createWatcher = (api) ->
 #    apiReq.end()
 
 
-    onApiResponse = (res) ->
-      console.log "Got response from API server"
-      console.log
-        status: res.statusCode
-        headers: JSON.stringify res.headers
-      res.setEncoding 'utf8'
-      res.on 'data', (chunk) -> console.log 'BODY: ' + chunk
-      next()
+#    onApiResponse = (res) ->
+#      console.log "Got response from API server"
+#      console.log
+#        status: res.statusCode
+#        headers: JSON.stringify res.headers
+#      res.setEncoding 'utf8'
+#      res.on 'data', (chunk) -> console.log 'BODY: ' + chunk
+#      next()
 
-    onApiErr = (err) ->
-      console.warn 'problem with API request: ' + err.message
-      next()
+#    onApiErr = (err) ->
+#      console.warn 'problem with API request: ' + err.message
+#      next()
 
     apiReq = http.get "#{req.protocol}://#{host}:#{port}#{req.path}", onApiResponse
     apiReq.on 'error', onApiErr
+
+    # Could try `res.redirect(url)`
 
 
 module.exports =
