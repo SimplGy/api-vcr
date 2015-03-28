@@ -4,5 +4,4 @@ console.log ''
 console.log '     (つ -‘ _ ‘- )つ        '
 console.log ''
 
-server = require './src/server.js'
-server.start()
+require('./src/server.js').start()

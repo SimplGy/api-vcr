@@ -29,15 +29,12 @@ If you'd like to run in offline playback mode, which serves up prerecorded data,
 
 ## TODO
 
-- [ ] Start the app with a `--record=http://api.foo.com` option
-- [ ] Logs all requests to console
-- [ ] Pass requests on to the recorded server
+- [x] Start the app a `record` option
+- [x] Logs all requests to console
+- [.] Pass requests on to the recorded server (Tricky. Lots of protocol, method, and port cases. get this to work)
 - [ ] Store requests (use a separate storage module so the mechanism can change between file and nosql in future)
-
-- [ ] Just listen to all requests, and try to fetch data dynamically when a request comes in. Right now I'm building routes ahead of time (silly).
+- [ ] Support multiple servers. Namespace data store by server+port name
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
-- [ ] Record traffic and responses to an api server, and record them. How can node monitor http requests and responses on the system?
-Can the app proxy traffic through it and record responses as it gets them?
 - [ ] Support query params
 - [ ] Support missing components intelligently (eg: if you have `surfboard/3` and they request `5`, return the closest match)
 

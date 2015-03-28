@@ -1,10 +1,11 @@
 # Includes
 express      = require 'express'
 http         = require 'http'
-dataStore    = require './dataStore'
-recorder     = require './responseRecorder'
-fileScanner  = require './fileScanner'
 config       = require './config'
+dataStore    = require './dataStore'
+apiRecorder  = require './apiRecorder'
+fileScanner  = require './fileScanner'
+
 
 
 
@@ -18,11 +19,7 @@ onError =(error) -> if (error.syscall isnt 'listen') then throw error;
 onListening = ->
   addr = server.address();
   bind = if typeof addr is 'string' then 'pipe ' + addr else 'port ' + addr.port;
-  console.log('Listening on ' + bind);
-
-proxyRequestAndRecordResponse = (req, res, next) ->
-  console.log "recording api responses"
-  next()
+  console.log('Express server listening on ' + bind);
 
 
 
@@ -32,13 +29,13 @@ proxyRequestAndRecordResponse = (req, res, next) ->
 # -------------------------------------------------- Public Methods/Exports
 # Start with recording
 record = (api) ->
-  app.use proxyRequestAndRecordResponse
+#  console.log "Configuring to record this api: #{api}"
+  app.use apiRecorder.createWatcher(api)
   start()
 
 # Start without recording
 start = (port) ->
   app.use dataStore.fetchDataForRequest
-  console.log "Starting express server"
   server = http.createServer app
   server.listen port || config.defaultPort
   server.on 'error', onError
