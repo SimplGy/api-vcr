@@ -2,7 +2,9 @@
 
 This records API responses so you can play them back later, quickly and reliably.
 
-Allows for fast, deterministic, accurate development and testing.
+If you're a front-end developer this means you can develop without an API server--even without the internet.
+
+You can also write tests for front end components that have some API dependencies but shouldn't break if the API server has hiccups.
 
 It's good for:
 
@@ -12,7 +14,7 @@ It's good for:
 * Throttled APIs (don't get shut down for querying too much while developing)
 * Dev teams that push back end changes frequently which require 30 minutes of API downtime to rebuild and deploy (ahem).
 
-This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay). Those projects might be better for your needs, I can't tell. Mine is different in these ways:
+This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay). Other projects might be better for your needs. Some things make this different:
 * This is written in Node, so it's easy to fit in with a front end developer's workflow.
 * I store the responses as plain text JSON files so you can modify them whenever you want, and see very clearly where I create bugs or mismatch your expectations on API paths.
 * You can fake out your own API by making a tree of `json` files. No recording necessary. That could be pretty useful, huh?
@@ -30,7 +32,7 @@ It uses folders to determine the api path it should respond to. If you'd like th
 
 ## Running
 
-The first thing you probably want to di is run in record mode, which proxies requests to your API server and records the responses for later playback.
+The first thing you probably want to do is run in record mode, which proxies requests to your API server and records the responses for later playback.
 
 Run in record mode:
 
