@@ -1,0 +1,15 @@
+{
+  "name": "apiVCR",
+  "version": "1.0.0",
+  "description": "Record api interactions, then play them back later, even without internet.",
+  "main": "index.js",
+  "keywords": [
+    "VCR",
+    "offline"
+  ],
+  "author": "Eric Miller",
+  "dependencies": {
+    "express": "^4.12.3",
+    "http": "0.0.0"
+  }
+}
