@@ -2,7 +2,7 @@
 (function() {
   var config, dataStore, fs, pathToFilename, readFile, save;
 
-  fs = require('fs.extra');
+  fs = require('fs-extra');
 
   config = require('./config');
 
@@ -21,36 +21,18 @@
   };
 
   save = function(httpRequest, data) {
-    var contents, file, finalResource, path, pathComponents, route;
-    console.log('dataStore.save()', {
-      headers_host: httpRequest.headers.host,
-      hostname: httpRequest.hostname,
-      originalUrl: httpRequest.originalUrl,
-      method: httpRequest.method,
-      data: data
-    });
+    var filename, pathComponents, route;
     if (!config.record) {
       return console.error("dataStore.save() doesn't work if you haven't configured a `record` server");
     }
-    pathComponents = [config.rootPath, config.record.split(':')[0], config.record.split(':')[1] || 80];
+    pathComponents = [config.rootPath, config.apiUrl.hostname, config.apiUrl.port || 80];
     route = httpRequest.path.split('/');
     if (route[0] === '') {
       route.shift();
     }
     Array.prototype.push.apply(pathComponents, route);
-    finalResource = pathComponents.pop();
-    path = pathComponents.join('/');
-    console.log("Make a deep path: ", path);
-    fs.mkdirRecursive(path, function(err) {
-      if (err) {
-        return console.warn("Couldn't make dir [" + path + "]", err);
-      }
-    });
-    file = "" + path + "/" + finalResource + ".json";
-    console.log("Create file: ", file);
-    contents = JSON.stringify(data, null, 2);
-    console.log("...with contents: ", contents);
-    return fs.writeFile(file, contents, function(err) {
+    filename = pathComponents.join('/') + '.json';
+    return fs.outputJson(filename, data, function(err) {
       if (err) {
         return console.log("Couldn't write file [" + file + "]", err);
       }

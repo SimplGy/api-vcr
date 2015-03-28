@@ -22,7 +22,7 @@ It uses folders to determine the api path it should respond to. If you'd like th
 
 If you'd like to run in live record mode, which proxies requests to your API server and records the responses for later playback, run this command:
 
-    node start.js --record=api.magicalsailboat.com
+    node start.js --record=http://api.magicalsailboat.com
 
 If you'd like to run in offline playback mode, which serves up prerecorded data, run this command:
 
