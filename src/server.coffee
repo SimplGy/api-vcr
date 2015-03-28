@@ -7,14 +7,21 @@ fileScanner  = require './fileScanner'
 config       = require './config'
 
 
+
+# -------------------------------------------------- Local Variables
+app = express()
+server = undefined # scope control
+
+
+# -------------------------------------------------- Private Methods
 onError =(error) -> if (error.syscall isnt 'listen') then throw error;
 onListening = ->
-  addr = @server.address();
+  addr = server.address();
   bind = if typeof addr is 'string' then 'pipe ' + addr else 'port ' + addr.port;
   console.log('Listening on ' + bind);
 
 proxyRequestAndRecordResponse = (req, res, next) ->
-  console.log "record"
+  console.log "recording api responses"
   next()
 
 
@@ -22,23 +29,27 @@ proxyRequestAndRecordResponse = (req, res, next) ->
 
 
 
-Server = ->
-  console.log "Constructing a server instance"
+# -------------------------------------------------- Public Methods/Exports
+# Start with recording
+record = (api) ->
+  app.use proxyRequestAndRecordResponse
+  start()
 
-Server.prototype =
-
-  start: (port) ->
-    @app = express()
-    @app.use proxyRequestAndRecordResponse
-    @app.use dataStore.fetchDataForRequest
-    console.log "Starting express server"
-    @server = http.createServer @app
-    @server.listen port || config.defaultPort
-    @server.on 'error', onError
-    @server.on 'listening', onListening.bind @
+# Start without recording
+start = (port) ->
+  app.use dataStore.fetchDataForRequest
+  console.log "Starting express server"
+  server = http.createServer app
+  server.listen port || config.defaultPort
+  server.on 'error', onError
+  server.on 'listening', onListening
 #    console.log "Found the following JSON data: ", JSON.stringify fileScanner.get(), null, 2
 
 
+module.exports =
+  record: record
+  start: start
 
 
-module.exports = new Server()
+
+

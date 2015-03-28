@@ -1,4 +1,8 @@
 # This script starts the project in `record` mode, which proxies requests to a specified API server and records the responses as they come back
+console.log 'Starting apiVCR in record mode'
+console.log ''
+console.log '      ᕙ༼ ,,ԾܫԾ,, ༽ᕗ        '
+console.log ''
 
 server = require './src/server.js'
 

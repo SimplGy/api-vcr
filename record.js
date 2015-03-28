@@ -2,6 +2,14 @@
 (function() {
   var api, server;
 
+  console.log('Starting apiVCR in record mode');
+
+  console.log('');
+
+  console.log('      ᕙ༼ ,,ԾܫԾ,, ༽ᕗ        ');
+
+  console.log('');
+
   server = require('./src/server.js');
 
   api = process.argv[2];
