@@ -1,4 +1,4 @@
-# API VCR
+# Record and Play Back your API
 
 This records API responses so you can play them back later, quickly and reliably.
 
@@ -15,6 +15,7 @@ It's good for:
 * Dev teams that push back end changes frequently which require 30 minutes of API downtime to rebuild and deploy (ahem).
 
 This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay). Other projects might be better for your needs. Some things make this different:
+* Other solutions are focused on testing. That's great and valid, but I want to develop against something fast, deterministic, and reliable, too.
 * This is written in Node, so it's easy to fit in with a front end developer's workflow.
 * I store the responses as plain text JSON files so you can modify them whenever you want, and see very clearly where I create bugs or mismatch your expectations on API paths.
 * You can fake out your own API by making a tree of `json` files. No recording necessary. That could be pretty useful, huh?

@@ -1,8 +1,8 @@
 {
-  "name": "apiVCR",
+  "name": "api-vcr",
   "version": "0.1",
   "description": "Record API responses for later. Work from a plane, train, or submarine. Code and test without an API server.",
-  "homepage": "https://github.com/SimplGy/apiVCR",
+  "homepage": "https://github.com/SimplGy/api-vcr",
   "main": "start.js",
   "keywords": [
     "VCR",
@@ -10,7 +10,7 @@
     "testing",
     "mocks"
   ],
-  "author": "Eric Miller -- Simple Guy",
+  "author": "simplgy",
   "dependencies": {
     "express": "^4.12.3",
     "express-http-proxy": "^0.3.1",
