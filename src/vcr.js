@@ -18,9 +18,11 @@
 
   server = void 0;
 
-  onError = function(error) {
-    if (error.syscall !== 'listen') {
-      throw error;
+  onError = function(err) {
+    if (err.code === 'EADDRINUSE') {
+      return console.log(config.port + " is in use. Can't start the server. Change the port with the `--port=1234` option");
+    } else if (err.syscall !== 'listen') {
+      throw err;
     }
   };
 

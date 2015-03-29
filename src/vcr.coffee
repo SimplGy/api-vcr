@@ -12,7 +12,11 @@ server = undefined # scope control
 
 
 # -------------------------------------------------- Private Methods
-onError =(error) -> if (error.syscall isnt 'listen') then throw error;
+onError = (err) ->
+  if err.code is 'EADDRINUSE'
+    console.log config.port + " is in use. Can't start the server. Change the port with the `--port=1234` option"
+  else if err.syscall isnt 'listen'
+    throw err;
 onListening = ->
   addr = server.address();
   bind = if typeof addr is 'string' then 'pipe ' + addr else 'port ' + addr.port;
@@ -62,8 +66,8 @@ record = ->
 # Start without recording
 start = ->
   app.use dataStore.fetchDataForRequest
-  startServer()
 #  console.log "Found the following JSON data: ", JSON.stringify fileScanner.get(), null, 2
+  startServer()
 
 module.exports =
   record: record

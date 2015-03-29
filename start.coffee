@@ -1,4 +1,4 @@
-server    = require './src/server'
+vcr       = require './src/vcr'
 minimist  = require 'minimist'
 url       = require 'url'
 config    = require './src/config'
@@ -15,19 +15,12 @@ config.api      = url.parse options.api                # Need an API server for 
 config.port     = config.api.port if config.api.port   # Use the api port as the default port.
 config.port     = options.port if options.port         # Support port overriding. Useful for running multiple servers at once
 config.rootPath = options.data if options.data         # Support changing the path where the data lives
-server.record() if options.record                      # Tell the server to proxy and record requests
+vcr.record() if options.record                      # Tell the server to proxy and record requests
 
 #console.log 'config.api', config.api
 config.computeFilePath()
 
-server.start()
-
-
-
-
-
-
-
+vcr.start()
 
 
 
