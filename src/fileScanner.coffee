@@ -27,7 +27,6 @@ readFiles = (path) ->
 
 
 
-
 module.exports =
   get: ->
     jsonFiles = []

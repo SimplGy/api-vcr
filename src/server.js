@@ -62,10 +62,14 @@
   };
 
   record = function() {
+    var safeHref;
+    if (config.api.href[config.api.href.length - 1] === '/') {
+      safeHref = config.api.href.substr(0, config.api.href.length - 1);
+    }
     console.log('');
-    console.log("Recording " + config.api.href + "     ᕙ༼ ,,ԾܫԾ,, ༽ᕗ ");
+    console.log("Recording " + safeHref + "     ᕙ༼ ,,ԾܫԾ,, ༽ᕗ ");
     console.log('');
-    return app.use(proxy(config.api.href, {
+    return app.use(proxy(safeHref, {
       decorateRequest: decorateProxiedRequest,
       intercept: interceptProxiedResponse
     }));

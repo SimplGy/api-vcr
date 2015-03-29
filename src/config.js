@@ -4,7 +4,12 @@
 
   config = {
     port: 59007,
-    rootPath: './data'
+    rootPath: './data',
+    computeFilePath: function() {
+      config.filePath = [config.rootPath, config.api.hostname, config.api.port || 80].join('/');
+      console.log("Using file path: `" + config.filePath + "`");
+      return config.filePath;
+    }
   };
 
   module.exports = config;

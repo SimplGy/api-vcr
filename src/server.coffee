@@ -26,6 +26,7 @@ startServer = ->
   server.on 'listening', onListening
 
 decorateProxiedRequest = (req) ->
+#  console.log "decorating", req
   # Fixes issue: https://github.com/villadora/express-http-proxy/issues/9
   req.headers[ 'Accept-Encoding' ] = 'utf8' #TODO: only accept application/json?
   delete req.headers['if-modified-since']
@@ -48,10 +49,13 @@ interceptProxiedResponse = (data, req, res, callback) ->
 # -------------------------------------------------- Public Methods/Exports
 # Pass requests on to an api server
 record = ->
+  # proxy-express can't deal with a trailing slash. Strip it out.
+  if config.api.href[config.api.href.length - 1] is '/'
+    safeHref = config.api.href.substr 0, config.api.href.length - 1
   console.log ''
-  console.log "Recording #{config.api.href}     ᕙ༼ ,,ԾܫԾ,, ༽ᕗ "
+  console.log "Recording #{safeHref}     ᕙ༼ ,,ԾܫԾ,, ༽ᕗ "
   console.log ''
-  app.use proxy config.api.href,
+  app.use proxy safeHref,
     decorateRequest: decorateProxiedRequest
     intercept: interceptProxiedResponse
 

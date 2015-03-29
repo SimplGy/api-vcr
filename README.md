@@ -36,18 +36,18 @@ The first thing you probably want to do is run in record mode, which proxies req
 
 Run in record mode:
 
-    node start.js --record=http://api.magicalsailboat.com:8080
+    node start.js --api=http://api.magicalsailboat.com:8080 --record
 
 If you already have a good data set, either from manual creation or recording, you don't need to proxy requests to the api server or record any new reponses.
 
 Run in offline playback mode:
 
-    node start.js
+    node start.js --api=http://api.magicalsailboat.com:8080
 
 
 ## Options
 
-You can specify a port. This is useful for running more than once instance.
+You can specify a port. This is useful for running more than once instance. The port of the API server is used by default, this keeping proxies straight a little easier if you have remote APIs identified by port.
 
 Set the port:
 
