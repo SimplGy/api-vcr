@@ -17,7 +17,7 @@ config.port     = options.port if options.port         # Support port overriding
 config.rootPath = options.data if options.data         # Support changing the path where the data lives
 server.record() if options.record                      # Tell the server to proxy and record requests
 
-console.log 'config.api', config.api
+#console.log 'config.api', config.api
 config.computeFilePath()
 
 server.start()

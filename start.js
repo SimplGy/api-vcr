@@ -42,8 +42,6 @@
     server.record();
   }
 
-  console.log('config.api', config.api);
-
   config.computeFilePath();
 
   server.start();
