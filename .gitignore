@@ -1,3 +1,4 @@
 data/
+.api-vcr-data/
 .idea/
 node_modules/
