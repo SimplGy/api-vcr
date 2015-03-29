@@ -71,3 +71,5 @@ Set the data path:
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params
 - [ ] Support missing components intelligently (eg: if you have `surfboard/3` and they request `5`, return the closest match)
+- [ ] Support response types other than JSON gracefully
+- [ ] Support POST, PUT, DELETE (at least don't error, and return a sensible object)
