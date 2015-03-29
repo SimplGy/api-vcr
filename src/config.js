@@ -6,7 +6,7 @@
 
   config = {
     port: 59007,
-    rootPath: './.api-vcr.data',
+    rootPath: './.api-vcr-data',
     computeFilePath: function() {
       config.filePath = [config.rootPath, config.api.hostname, config.api.port || 80].join('/');
       console.log("Using file path: `" + config.filePath + "`");

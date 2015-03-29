@@ -2,8 +2,7 @@ fs = require 'fs-extra'
 
 config =
   port: 59007
-#  rootPath: './data'
-  rootPath: './.api-vcr.data'
+  rootPath: './.api-vcr-data'
   # Compute the path using `root / hostname / port`
   computeFilePath: ->
     config.filePath = [
