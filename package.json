@@ -1,13 +1,16 @@
 {
   "name": "apiVCR",
-  "version": "1.0.0",
-  "description": "Record api interactions, then play them back later, even without internet.",
-  "main": "index.js",
+  "version": "0.1",
+  "description": "Record API responses for later. Work from a plane, train, or submarine. Code and test without an API server.",
+  "homepage": "https://github.com/SimplGy/apiVCR",
+  "main": "start.js",
   "keywords": [
     "VCR",
-    "offline"
+    "offline",
+    "testing",
+    "mocks"
   ],
-  "author": "Eric Miller",
+  "author": "Eric Miller -- Simple Guy",
   "dependencies": {
     "express": "^4.12.3",
     "express-http-proxy": "^0.3.1",
