@@ -1,7 +1,9 @@
+fs = require 'fs-extra'
 
 config =
   port: 59007
-  rootPath: './data'
+#  rootPath: './data'
+  rootPath: './.api-vcr.data'
   # Compute the path using `root / hostname / port`
   computeFilePath: ->
     config.filePath = [
@@ -10,6 +12,7 @@ config =
       config.api.port || 80 # TODO: handle https
     ].join '/'
     console.log "Using file path: `#{config.filePath}`"
+    fs.ensureDirSync config.filePath
     config.filePath
 
 
