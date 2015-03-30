@@ -60,6 +60,13 @@ Set the data path:
 
     node start.js --data=~/sites/myApp/testData
 
+By default the vcr looks for a sibling if it can't find a requested object. If you ask for `user/7`, for example, it will return `user/42` if it has one.
+This is awesome if you just want to keep working and it doesn't matter too much that it's the wrong user/product/sprocket/whatever.
+
+Not everyone wants this behavior though. To turn it off:
+
+    node start.js --noSiblings
+
 
 ## TODO
 
@@ -70,6 +77,6 @@ Set the data path:
 - [x] Store request responses as JSON files
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params
-- [ ] Support missing components intelligently (eg: if you have `surfboard/3` and they request `5`, return the closest match)
+- [x] Support missing components intelligently (eg: if you have `surfboard/3` and they request `5`, return a sibling)
 - [ ] Support response types other than JSON gracefully
 - [ ] Support POST, PUT, DELETE (at least don't error, and return a sensible object)

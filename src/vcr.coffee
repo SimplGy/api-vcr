@@ -24,6 +24,8 @@ onListening = ->
   console.log ''
 
 startServer = ->
+  console.log "Creating the `api-vcr` express server"
+  fileScanner.count()
   server = http.createServer app
   server.listen config.port
   server.on 'error', onError
@@ -59,6 +61,7 @@ record = ->
   console.log ''
   console.log "Recording #{safeHref}     ᕙ༼ ,,ԾܫԾ,, ༽ᕗ "
   console.log ''
+  config.isRecording = true
   app.use proxy safeHref,
     decorateRequest: decorateProxiedRequest
     intercept: interceptProxiedResponse

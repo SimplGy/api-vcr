@@ -26,6 +26,10 @@
 
   config.api = url.parse(options.api);
 
+  if (options.noSiblings) {
+    config.sameSameSiblings = false;
+  }
+
   if (config.api.port) {
     config.port = config.api.port;
   }
