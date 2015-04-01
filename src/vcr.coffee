@@ -1,10 +1,10 @@
 # Includes
-express      = require 'express'
-http         = require 'http'
-config       = require './config'
-dataStore    = require './dataStore'
-fileScanner  = require './fileScanner'
-proxy        = require 'express-http-proxy'
+express       = require 'express'
+http          = require 'http'
+config        = require './config'
+staticData    = require './staticData'
+fileIO        = require './fileIO'
+proxy         = require 'express-http-proxy'
 
 # -------------------------------------------------- Local Variables
 app = express()
@@ -16,7 +16,8 @@ onError = (err) ->
   if err.code is 'EADDRINUSE'
     console.log config.port + " is in use. Can't start the server. Change the port with the `--port=1234` option"
   else if err.syscall isnt 'listen'
-    throw err;
+    throw err
+
 onListening = ->
   addr = server.address();
   bind = if typeof addr is 'string' then 'pipe ' + addr else 'port ' + addr.port;
@@ -25,7 +26,7 @@ onListening = ->
 
 startServer = ->
   console.log "Creating the `api-vcr` express server"
-  fileScanner.count()
+  fileIO.count()
   server = http.createServer app
   server.listen config.port
   server.on 'error', onError
@@ -43,7 +44,7 @@ interceptProxiedResponse = (data, req, res, callback) ->
   data = data.toString 'utf8'
   try
     data = JSON.parse data
-    dataStore.save req, data
+    staticData.save req, data
     callback null, JSON.stringify(data) # Continue on to the proxy library
   catch
     console.warn "unable to parse JSON response from API server",
@@ -68,8 +69,8 @@ record = ->
 
 # Start without recording
 start = ->
-  app.use dataStore.fetchDataForRequest
-#  console.log "Found the following JSON data: ", JSON.stringify fileScanner.get(), null, 2
+  app.use staticData.fetchDataForRequest
+#  console.log "Found the following JSON data: ", JSON.stringify fileIO.get(), null, 2
   startServer()
 
 module.exports =

@@ -2,16 +2,22 @@
 
 /*
   Stateless utility methods for accessing api-vcr files.
+  Any CRUD that is file system specific should go here
  */
 
 (function() {
-  var config, count, fs, getSiblingName, path, readFiles;
+  var config, convertReqToFilename, count, fs, getSiblingName, path, queryStringIndicator, readFiles, stringifyParams, _,
+    __hasProp = {}.hasOwnProperty;
 
   fs = require('fs');
 
   config = require('./config');
 
   path = require('path');
+
+  _ = require('lodash');
+
+  queryStringIndicator = '__&__';
 
   readFiles = function(filePath, jsonFiles) {
     var contents, file, fullPath, _i, _len;
@@ -41,7 +47,11 @@
   getSiblingName = function(filename) {
     var dirContents;
     dirContents = readFiles(path.dirname(filename));
-    return dirContents[0];
+    if (dirContents) {
+      return dirContents[0];
+    } else {
+      return void 0;
+    }
   };
 
   count = function() {
@@ -60,10 +70,37 @@
     }
   };
 
+  stringifyParams = function(params) {
+    var prop, sorted, strings;
+    if (!params) {
+      return '';
+    }
+    strings = [];
+    for (prop in params) {
+      if (!__hasProp.call(params, prop)) continue;
+      strings.push("" + prop + "=" + params[prop]);
+    }
+    if (strings.length === 0) {
+      return '';
+    }
+    sorted = _.sortBy(strings, function(s) {
+      return s.charCodeAt(0);
+    });
+    return queryStringIndicator + sorted.join('&');
+  };
+
+  convertReqToFilename = function(req) {
+    var file;
+    file = config.filePath + req.path;
+    file += stringifyParams(req.query);
+    return file += '.json';
+  };
+
   module.exports = {
     count: count,
     getSiblingName: getSiblingName,
-    get: readFiles
+    list: readFiles,
+    convertReqToFilename: convertReqToFilename
   };
 
 }).call(this);

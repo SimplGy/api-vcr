@@ -45,6 +45,10 @@ Run in offline playback mode:
 
     node start.js --api=http://api.magicalsailboat.com:8080
 
+To run in debug mode with `node-inspector`:
+
+    npm install -g node-inspector
+    node-debug start.js --api=http://api.magicalsailboat.com:8080
 
 ## Options
 
@@ -75,6 +79,7 @@ Not everyone wants this behavior though. To turn it off:
 - [x] Pass requests on to the recorded server
 - [x] Create a directory structure that matches requests (namespace by server and port to support multiple APIs)
 - [x] Store request responses as JSON files
+- [ ] Print version on startup
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params
 - [x] Support missing components intelligently (eg: if you have `surfboard/3` and they request `5`, return a sibling)

@@ -2,7 +2,6 @@ vcr       = require './src/vcr'
 minimist  = require 'minimist'
 url       = require 'url'
 config    = require './src/config'
-dataStore = require './src/dataStore'
 
 console.log ''
 console.log 'apiVCR Starting'
