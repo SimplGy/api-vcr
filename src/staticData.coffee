@@ -48,15 +48,15 @@ save = (req, data) ->
 
 METHODS =
   GET:    get
-  POST:   -> console.warn "staticData.POST not yet supported",   arguments
-  PUT:    -> console.warn "staticData.PUT not yet supported",    arguments
-  DELETE: -> console.warn "staticData.DELETE not yet supported", arguments
+  POST:   (req, res, next) -> next(); console.warn "staticData.POST not yet supported",   arguments
+  PUT:    (req, res, next) -> next(); console.warn "staticData.PUT not yet supported",    arguments
+  DELETE: (req, res, next) -> next(); console.warn "staticData.DELETE not yet supported", arguments
 
 
 module.exports =
   save:   save
   fetchDataForRequest: (req) ->
-    console.log "#{req.method} localhost:#{config.port} #{req.path}"
+    console.log "#{req.method} localhost:#{config.port} #{req.path}" # TODO: print the query params, too
     METHODS[req.method].apply this, arguments
 #    METHODS[req.method] req.path, (err, data) ->
 #    if data then res.send data

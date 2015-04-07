@@ -8,11 +8,11 @@ You can also write tests for front end components that have some API dependencie
 
 It's good for:
 
-* Testing (The responses are always the same, and fast)
+* Testing (Responses are always the same, and fast)
 * Nomads (Work on JS apps without internet)
 * Unstable APIs (the VCR smooths out API downtimes)
 * Throttled APIs (don't get shut down for querying too much while developing)
-* Dev teams that push back end changes frequently which require 30 minutes of API downtime to rebuild and deploy (ahem).
+* Coordinating with frequent back end changes that require 30 minutes of API downtime to rebuild and deploy (ahem).
 
 This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay). Other projects might be better for your needs. Some things make this different:
 * Other solutions are focused on testing. That's great and valid, but I want to develop against something fast, deterministic, and reliable, too.
@@ -79,6 +79,7 @@ Not everyone wants this behavior though. To turn it off:
 - [x] Pass requests on to the recorded server
 - [x] Create a directory structure that matches requests (namespace by server and port to support multiple APIs)
 - [x] Store request responses as JSON files
+- [ ] Support easy running from projects that depend on this one (npm install. package.json bin? scripts? Don't know.)
 - [ ] Print version on startup
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params

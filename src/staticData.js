@@ -55,13 +55,16 @@
 
   METHODS = {
     GET: get,
-    POST: function() {
+    POST: function(req, res, next) {
+      next();
       return console.warn("staticData.POST not yet supported", arguments);
     },
-    PUT: function() {
+    PUT: function(req, res, next) {
+      next();
       return console.warn("staticData.PUT not yet supported", arguments);
     },
-    DELETE: function() {
+    DELETE: function(req, res, next) {
+      next();
       return console.warn("staticData.DELETE not yet supported", arguments);
     }
   };
