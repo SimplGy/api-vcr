@@ -21,7 +21,7 @@
 
   readFiles = function(filePath, jsonFiles) {
     var contents, file, fullPath, _i, _len;
-    filePath = filePath || config.rootPath;
+    filePath = filePath || config.filePath;
     jsonFiles = jsonFiles || [];
     if (config.ignore.indexOf(path.basename(filePath)) !== -1) {
       return;
@@ -57,17 +57,18 @@
   count = function() {
     count = readFiles().length;
     if (count === 0) {
-      console.log("No JSON files found in `" + config.rootPath + "`");
+      console.log("No JSON files found in `" + config.filePath + "`");
       if (config.isRecording) {
-        return console.log("Good thing you're recording");
+        console.log("Good thing you're recording");
       } else {
-        return console.log("You should probably add some or run in `--record` mode first");
+        console.log("You should probably add some or run in `--record` mode first");
       }
     } else if (count === 1) {
-      return console.log("Only found one file. What is this, don't trust me yet?");
+      console.log("Only found one file. What is this, don't trust me yet?");
     } else {
-      return console.log("Found " + count + " JSON files. You're ready to jam.");
+      console.log("Found " + count + " JSON files. You're ready to jam.");
     }
+    return count;
   };
 
   stringifyParams = function(params) {

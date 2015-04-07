@@ -14,7 +14,7 @@ queryStringIndicator = '__&__' # This file system safe flag is how I know there'
 # Get a list of all the folders
 # Recursively scan all files in the path to get a list of json files
 readFiles = (filePath, jsonFiles) ->
-  filePath = filePath || config.rootPath
+  filePath = filePath || config.filePath
   jsonFiles = jsonFiles || []
   return if config.ignore.indexOf(path.basename filePath) isnt -1
   try
@@ -50,7 +50,7 @@ getSiblingName = (filename) ->
 count = ->
   count = readFiles().length
   if count is 0
-    console.log "No JSON files found in `#{config.rootPath}`"
+    console.log "No JSON files found in `#{config.filePath}`"
     if config.isRecording
       console.log "Good thing you're recording"
     else
@@ -59,6 +59,7 @@ count = ->
     console.log "Only found one file. What is this, don't trust me yet?"
   else
     console.log "Found #{count} JSON files. You're ready to jam."
+  return count
 
 # Given a param object, turn it into a string that is always the same no matter the param order, and is safe for a filename
 stringifyParams = (params) ->
