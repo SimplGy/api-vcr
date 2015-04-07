@@ -14,8 +14,9 @@ It's good for:
 * **Throttled APIs** (don't get shut down for querying too much while developing)
 * **Coordinating** with frequent back end changes that require 30 minutes of API downtime to rebuild and deploy (ahem).
 
-This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay). Other projects might be better for your needs. Some things make this different:
-* Other solutions are focused on testing. That's great and valid, but I want to develop against something fast, deterministic, and reliable, too.
+This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay).
+Other projects might be better for your needs, but some things make this one different:
+* Other solutions are focused on testing. That's great and valid, but I want to **develop** against something fast, deterministic, and reliable, too.
 * This is written in Node, so it's easy to fit in with a front end developer's workflow.
 * I store the responses as plain text JSON files so you can modify them whenever you want, and see very clearly where I create bugs or mismatch your expectations on API paths.
 * You can fake out your own API by making a tree of `json` files. No recording necessary. That could be pretty useful, huh?
@@ -33,35 +34,73 @@ You'd have to type `./node_modules/.bin/api-vcr` all the time (plus args), and I
 This is actually why [grunt-cli](https://github.com/gruntjs/grunt-cli) exists, I now understand.
 
 
-## Running
+## Quick Start Guide
 
-The first thing you probably want to do is run in record mode, which proxies requests to your API server and records the responses for later playback.
+First let's launch in record mode so we can pass through requests and record the responses.
 
-Run in record mode:
+To run in record mode:
 
-    api-vcr http://myapi.com:8080 --record
+    api-vcr http://jsonplaceholder.typicode.com/ --record
 
-If you already have a good data set, either from manual creation or recording, you don't need to proxy requests to the api server or record any new reponses.
+Now lets hit some endpoints so we can get a nice set of data.
 
-Run in offline playback mode:
+In a browser, you can drop in these urls, or any from the [jsonplaceholder api](http://jsonplaceholder.typicode.com/):
 
-    api-vcr http://myapi.com:8080
+* [http://localhost:59007/users]
+* [http://localhost:59007/users/1]
+* [http://localhost:59007/posts]
+* [http://localhost:59007/posts/1]
+* [http://localhost:59007/posts/2]
+* [http://localhost:59007/posts/1/comments]
+
+For each request, the VCR will create a single JSON file, using the request information to name the file.
+
+For example, the file:
+
+    GET http://localhost:59007/posts/1/comments
+
+Gets mapped to the file:
+
+    ./api-vcr-data/jsonplaceholder.typicode.com/80/posts/1/comments.json
+
+After making requests to localhost with the recorder running, you should see the log saying that files are being written,
+and you should be able to explore a tree of easy to see, editable JSON files. You can change these manually if you want.
+Be aware the recorder will overwrite them if you run it again later.
+
+Go ahead and kill the server now. `Ctrl+C`.
+
+Armed with recorded data, you're ready to run in offline mode.
+
+    api-vcr http://jsonplaceholder.typicode.com
+
+Now any request you've previously recorded returns instantly from disk:
+
+* [http://localhost:59007/users/1]
+* [http://localhost:59007/posts]
+
+Similar requests you haven't recorded yet return their best guess:
+
+* [http://localhost:59007/users/777]
+
+Totally new requests 404:
+
+* [http://localhost:59007/the/rain/in/spain]
 
 
 ## Options
 
 You can specify a port for the vcr server to listen on.
 This is useful for running more than once instance.
-The port of the API server is used by default,
+The port of the API server is used by default (unless that port is 80),
 this makes keeping proxies straight a little easier if you have remote APIs identified only by port number.
 
 Set the port:
 
     api-vcr http://myapi.com:8080 --port=1337
 
-By default, data is stored locally in this project. You probably want to change where the data files are stored--maybe keep them in your own project.
+By default, data is stored wherever you run the command. If you always run the command from your project dir, this works well.
 
-Set the data path:
+You can also set a hard-coded data path:
 
     api-vcr http://myapi.com:8080 --data=~/sites/myApp/testData
 
@@ -75,12 +114,16 @@ Not everyone wants this behavior though. To turn it off:
 
 ## Seeding data
 
-Data is all in the `./data` folder. This is configurable, so you can store your data files with your project if you want to.
+Data is all in the `./api-vcr-data` folder local to where you run the command.
+
+This is configurable, so you can store your data files with your project if you want to.
 
 Folder and file names are used to determine the api path the VCR playback should respond to.
 If you'd like the server to respond to `users/1`, create this file:
 
-    data/users/1.json
+    ./users/1.json
+
+You can record and modify, or seed from scratch, a complex tree of test data and distribute it in git with your project for consistent testing across machines.
 
 
 ## TODO
@@ -91,9 +134,14 @@ If you'd like the server to respond to `users/1`, create this file:
 - [x] Create a directory structure that matches requests (namespace by server and port to support multiple APIs)
 - [x] Store request responses as JSON files
 - [x] Support missing objects (eg: if you have recorded `surfboard/3` and they request `5`, return `3` instead)
-- [ ] Support easy running from projects that depend on this one (npm install. package.json bin? scripts? Don't know.)
 - [x] Print version on startup
+- [ ] Support easy running from projects that depend on this one (npm install. package.json bin? scripts? Don't know.)
+
+- [ ] Bug: returning similar siblings returns deep nested JSON if there is a child folder (eg: posts/777 returns posts/1/comments.json)
+- [ ] Bug: returning siblings shouldn't return list objects for id requests and visa-versa
+- [ ] Print the fully resolved path name for data, otherwise it's unclear where `.` is
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params
+- [ ] Option to trim large array responses to 20-100 max (default true)
 - [ ] Support response types other than JSON gracefully
 - [ ] Support POST, PUT, DELETE (at least don't error, and return a sensible object)
