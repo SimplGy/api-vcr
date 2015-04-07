@@ -126,6 +126,13 @@ If you'd like the server to respond to `users/1`, create this file:
 You can record and modify, or seed from scratch, a complex tree of test data and distribute it in git with your project for consistent testing across machines.
 
 
+## Developing
+
+Running the local version is the same except instead of `api-vcr`, you use `./cli.js` from this folder.
+
+You can bump the version with npm's awesome `npm version patch`, then `npm publish`.
+
+
 ## TODO
 
 - [x] Start the app a `record` option
@@ -135,10 +142,11 @@ You can record and modify, or seed from scratch, a complex tree of test data and
 - [x] Store request responses as JSON files
 - [x] Support missing objects (eg: if you have recorded `surfboard/3` and they request `5`, return `3` instead)
 - [x] Print version on startup
-- [ ] Support easy running from projects that depend on this one (npm install. package.json bin? scripts? Don't know.)
+- [x] Switch to a global install for easier run API by packages that depend on this one.
 
 - [ ] Bug: returning similar siblings returns deep nested JSON if there is a child folder (eg: posts/777 returns posts/1/comments.json)
 - [ ] Bug: returning siblings shouldn't return list objects for id requests and visa-versa
+- [ ] Support a config file, maybe in `./api-vcr-config.json` (is there an option parsing library that supports fall-through from args to json file to defaults?)
 - [ ] Print the fully resolved path name for data, otherwise it's unclear where `.` is
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params
