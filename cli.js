@@ -11,7 +11,9 @@ vcr      = require('./src/vcr');
 minimist = require('minimist');
 url      = require('url');
 config   = require('./src/config');
+fileIO   = require('./src/fileIO');
 pkg      = require('./package.json');
+
 
 
 console.log('');
@@ -29,8 +31,6 @@ if (config.api.pathname === config.api.href && config.api.path === config.api.hr
   throw "API server specified doesn't look like a url: " + mightBeApi;
 }
 
-console.log(config.api)
-
 if (options.noSiblings) {
   config.sameSameSiblings = false;
 }
@@ -43,11 +43,14 @@ if (options.port) {
 if (options.data) {
   config.rootPath = options.data;
 }
-if (options.record) {
-  vcr.record();
-}
 
 config.computeFilePath();
+
+if (options.record) {
+  vcr.record();
+} else if (!fileIO.count()) {
+  process.exit(12) // if we aren't recording AND there are no files, this is an error
+}
 
 vcr.start();
 

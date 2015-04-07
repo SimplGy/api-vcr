@@ -36,7 +36,6 @@
 
   startServer = function() {
     console.log("Creating the `api-vcr` express server");
-    fileIO.count();
     server = http.createServer(app);
     server.listen(config.port);
     server.on('error', onError);
