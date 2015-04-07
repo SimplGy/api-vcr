@@ -46,20 +46,20 @@ Now lets hit some endpoints so we can get a nice set of data.
 
 In a browser, you can drop in these urls, or any from the [jsonplaceholder api](http://jsonplaceholder.typicode.com/):
 
-* [http://localhost:59007/users]
-* [http://localhost:59007/users/1]
-* [http://localhost:59007/posts]
-* [http://localhost:59007/posts/1]
-* [http://localhost:59007/posts/2]
-* [http://localhost:59007/posts/1/comments]
+* [http://localhost:59007/users](http://localhost:59007/users)
+* [http://localhost:59007/users/1](http://localhost:59007/users/1)
+* [http://localhost:59007/posts](http://localhost:59007/posts)
+* [http://localhost:59007/posts/1](http://localhost:59007/posts/1)
+* [http://localhost:59007/posts/2](http://localhost:59007/posts/2)
+* [http://localhost:59007/posts/1/comments](http://localhost:59007/posts/1/comments)
 
 For each request, the VCR will create a single JSON file, using the request information to name the file.
 
-For example, the file:
+For example, the request:
 
     GET http://localhost:59007/posts/1/comments
 
-Gets mapped to the file:
+Is mapped to the file:
 
     ./api-vcr-data/jsonplaceholder.typicode.com/80/posts/1/comments.json
 
@@ -75,16 +75,16 @@ Armed with recorded data, you're ready to run in offline mode.
 
 Now any request you've previously recorded returns instantly from disk:
 
-* [http://localhost:59007/users/1]
-* [http://localhost:59007/posts]
+* [http://localhost:59007/users/1](http://localhost:59007/users/1)
+* [http://localhost:59007/posts](http://localhost:59007/posts)
 
 Similar requests you haven't recorded yet return their best guess:
 
-* [http://localhost:59007/users/777]
+* [http://localhost:59007/users/777](http://localhost:59007/users/777)
 
 Totally new requests 404:
 
-* [http://localhost:59007/the/rain/in/spain]
+* [http://localhost:59007/the/rain/in/spain](http://localhost:59007/the/rain/in/spain)
 
 
 ## Options
