@@ -8,11 +8,11 @@ You can also write tests for front end components that have some API dependencie
 
 It's good for:
 
-* Testing (Responses are always the same, and fast)
-* Nomads (Work on JS apps without internet)
-* Unstable APIs (the VCR smooths out API downtimes)
-* Throttled APIs (don't get shut down for querying too much while developing)
-* Coordinating with frequent back end changes that require 30 minutes of API downtime to rebuild and deploy (ahem).
+* **Testing** (Responses are always the same, and fast)
+* **Nomads** (Work on JS apps without internet)
+* **Unstable APIs** (the VCR smooths out API downtimes)
+* **Throttled APIs** (don't get shut down for querying too much while developing)
+* **Coordinating** with frequent back end changes that require 30 minutes of API downtime to rebuild and deploy (ahem).
 
 This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay). Other projects might be better for your needs. Some things make this different:
 * Other solutions are focused on testing. That's great and valid, but I want to develop against something fast, deterministic, and reliable, too.
@@ -22,13 +22,15 @@ This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-se
 * Supports multiple API servers. You just run multiple instances and it stores data in a folder tree by hostname and port.
 
 
-## Seeding data
+## Installation
 
-Data is all in the local `data` folder. This is configurable, so you can store your data files with your project.
+This module is a dev tool with a command line interface, so it is installed globally.
 
-It uses folders to determine the api path it should respond to. If you'd like the server to respond to `users/1`, create this file in the repo:
+    npm install -g api-vcr
 
-    data/users/1.json
+I'd actually prefer it to be local to a project, but there's no way to provide a nice CLI API in a locally installed node module.
+You'd have to type `./node_modules/.bin/api-vcr` all the time (plus args), and I don't want to do that to you.
+This is actually why [grunt-cli](https://github.com/gruntjs/grunt-cli) exists, I now understand.
 
 
 ## Running
@@ -37,39 +39,48 @@ The first thing you probably want to do is run in record mode, which proxies req
 
 Run in record mode:
 
-    node start.js --api=http://api.magicalsailboat.com:8080 --record
+    api-vcr http://myapi.com:8080 --record
 
 If you already have a good data set, either from manual creation or recording, you don't need to proxy requests to the api server or record any new reponses.
 
 Run in offline playback mode:
 
-    node start.js --api=http://api.magicalsailboat.com:8080
+    api-vcr http://myapi.com:8080
 
-To run in debug mode with `node-inspector`:
-
-    npm install -g node-inspector
-    node-debug start.js --api=http://api.magicalsailboat.com:8080
 
 ## Options
 
-You can specify a port. This is useful for running more than once instance. The port of the API server is used by default, this keeping proxies straight a little easier if you have remote APIs identified by port.
+You can specify a port for the vcr server to listen on.
+This is useful for running more than once instance.
+The port of the API server is used by default,
+this makes keeping proxies straight a little easier if you have remote APIs identified only by port number.
 
 Set the port:
 
-    node start.js --port=1337
+    api-vcr http://myapi.com:8080 --port=1337
 
 By default, data is stored locally in this project. You probably want to change where the data files are stored--maybe keep them in your own project.
 
 Set the data path:
 
-    node start.js --data=~/sites/myApp/testData
+    api-vcr http://myapi.com:8080 --data=~/sites/myApp/testData
 
 By default the vcr looks for a sibling if it can't find a requested object. If you ask for `user/7`, for example, it will return `user/42` if it has one.
 This is awesome if you just want to keep working and it doesn't matter too much that it's the wrong user/product/sprocket/whatever.
 
 Not everyone wants this behavior though. To turn it off:
 
-    node start.js --noSiblings
+    api-vcr http://myapi.com:8080 --noSiblings
+
+
+## Seeding data
+
+Data is all in the `./data` folder. This is configurable, so you can store your data files with your project if you want to.
+
+Folder and file names are used to determine the api path the VCR playback should respond to.
+If you'd like the server to respond to `users/1`, create this file:
+
+    data/users/1.json
 
 
 ## TODO
@@ -79,10 +90,10 @@ Not everyone wants this behavior though. To turn it off:
 - [x] Pass requests on to the recorded server
 - [x] Create a directory structure that matches requests (namespace by server and port to support multiple APIs)
 - [x] Store request responses as JSON files
+- [x] Support missing objects (eg: if you have recorded `surfboard/3` and they request `5`, return `3` instead)
 - [ ] Support easy running from projects that depend on this one (npm install. package.json bin? scripts? Don't know.)
-- [ ] Print version on startup
+- [x] Print version on startup
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
 - [ ] Support query params
-- [x] Support missing components intelligently (eg: if you have `surfboard/3` and they request `5`, return a sibling)
 - [ ] Support response types other than JSON gracefully
 - [ ] Support POST, PUT, DELETE (at least don't error, and return a sensible object)

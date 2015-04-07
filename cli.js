@@ -5,24 +5,31 @@
 // The script must have a shebang in order to create the .cmd shim on windows:
 // https://github.com/ForbesLindesay/cmd-shim/blob/f59af911f1373239a7537072641d55ff882c3701/index.js#L22
 
-var config, minimist, options, url, vcr;
+var config, minimist, options, url, vcr, pkg;
 
 vcr      = require('./src/vcr');
 minimist = require('minimist');
 url      = require('url');
 config   = require('./src/config');
+pkg      = require('./package.json');
+
 
 console.log('');
-console.log('apiVCR Starting');
-console.log('---------------');
+console.log('apiVCR '+ pkg.version +' Starting');
+console.log('----------------------');
 
 options = minimist(process.argv.slice(2));
 
-if (!options.api) {
-  throw "Need an API server specified. eg: `node start.js --api=http://api.pickle.com`";
+mightBeApi = options._[0]
+if (!mightBeApi) {
+  throw "Need an API server specified. eg: `api-vcr http://api.pickle.com`";
+}
+config.api = url.parse(mightBeApi);
+if (config.api.pathname === config.api.href && config.api.path === config.api.href) {
+  throw "API server specified doesn't look like a url: " + mightBeApi;
 }
 
-config.api = url.parse(options.api);
+console.log(config.api)
 
 if (options.noSiblings) {
   config.sameSameSiblings = false;

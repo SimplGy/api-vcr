@@ -1,12 +1,13 @@
 {
   "name": "api-vcr",
-  "version": "0.1.22",
-  "description": "Record API responses for later. Work from a plane, island, or submarine. Code and test without an API server.",
+  "version": "0.1.23",
+  "description": "Record API responses for later. Work from a plane, island, or submarine. No internet needed.",
   "homepage": "https://github.com/SimplGy/api-vcr",
   "repository": {
     "type": "git",
     "url": "https://github.com/SimplGy/api-vcr"
   },
+  "preferGlobal": true,
   "bin": "./cli.js",
   "keywords": [
     "VCR",
