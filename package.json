@@ -1,6 +1,6 @@
 {
   "name": "api-vcr",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "Record API responses for later. Work from a plane, island, or submarine. No internet needed.",
   "homepage": "https://github.com/SimplGy/api-vcr",
   "repository": {
