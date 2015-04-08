@@ -8,6 +8,32 @@ path          = require 'path'
 
 # Given an API peth, fetch a corresponding file on the filesystem
 # If a file isn't found, attempts to return one in the same path with a different id (config.bestAvailable)
+###
+  TODO: Ideal similarity search when recorded data is not found:
+  Individual resource
+  1. Return exact item
+  2. Return sibling with nearby id
+  3. Return first item of a list with the same resource name (eg: request for animal/7 can return JSON.parse(animals.json)[0])
+  4. 404
+  Individual resource w/ query params
+  1. Return exact item with exact query params
+  2. Find same resource with a similar query (scoring similar queries should be fun)
+  3. Find same resource with no query
+  4. Find sibling resource with exact query params
+  5. Find sibling resource with similar query
+  6. Find sibling resource with no query
+  7. 404
+  Collection
+  1. return exact collection
+  2. Search for a child item(s). If there are any, add them all to an array and return that. (eg: [1.json, 2.json])
+  3. 404
+  Collection w/ query params
+  1. return exact collection w/ matching params
+  2. return exact collection with similar query
+  3. exact colleciton no query
+  4. child items merged into an array
+  5. 404
+###
 get = (req, res, next) ->
   file = fileIO.convertReqToFilename req
   fileCallback = (err, data) ->

@@ -130,7 +130,7 @@ You can record and modify, or seed from scratch, a complex tree of test data and
 
 Running the local version is the same except instead of `api-vcr`, you use `./cli.js` from this folder.
 
-You can bump the version with npm's awesome `npm version patch`, then `npm publish`.
+You can bump the version with npm's awesome `npm version patch && npm publish`.
 
 
 ## TODO
@@ -144,6 +144,7 @@ You can bump the version with npm's awesome `npm version patch`, then `npm publi
 - [x] Print version on startup
 - [x] Switch to a global install for easier run API by packages that depend on this one.
 
+- [ ] Bug: encode colons to `%3A` or something else in filenames
 - [ ] Bug: returning similar siblings returns deep nested JSON if there is a child folder (eg: posts/777 returns posts/1/comments.json)
 - [ ] Bug: returning siblings shouldn't return list objects for id requests and visa-versa
 - [ ] Support a config file, maybe in `./api-vcr-config.json` (is there an option parsing library that supports fall-through from args to json file to defaults?)

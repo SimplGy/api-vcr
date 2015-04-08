@@ -3,13 +3,14 @@
   Any CRUD that is file system specific should go here
 ###
 
-fs = require 'fs'
-config = require './config'
-path = require 'path'
-_ = require 'lodash'
+fs          = require 'fs'
+config      = require './config'
+path        = require 'path'
+_           = require 'lodash'
+querystring = require 'querystring'
 
 # config
-queryStringIndicator = '__&__' # This file system safe flag is how I know there's a query string in the filename. It's a bit ghetto.
+queryStringIndicator = '__&__' # This file system safe flag is how I know there's a query string in the filename. It's a bit ghetto. # Using an `&` instead of `?` because it's more file name safe.
 
 # Get a list of all the folders
 # Recursively scan all files in the path to get a list of json files
@@ -66,10 +67,10 @@ stringifyParams = (params) ->
   return '' unless params
   strings = []
   for own prop of params
-    strings.push "#{prop}=#{params[prop]}"
+    strings.push "#{querystring.escape prop}=#{querystring.escape params[prop]}"
   return '' if strings.length is 0
   sorted = _.sortBy strings, (s) -> s.charCodeAt 0
-  return queryStringIndicator + sorted.join('&') # Using an `&` instead of `?` because I have the impression it's more file name safe. TODO: encode these properly.
+  return queryStringIndicator + sorted.join('&')
 
 
 # Given an HTTP request, convert it to a filename.

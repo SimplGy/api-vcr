@@ -6,7 +6,7 @@
  */
 
 (function() {
-  var config, convertReqToFilename, count, fs, getSiblingName, path, queryStringIndicator, readFiles, stringifyParams, _,
+  var config, convertReqToFilename, count, fs, getSiblingName, path, queryStringIndicator, querystring, readFiles, stringifyParams, _,
     __hasProp = {}.hasOwnProperty;
 
   fs = require('fs');
@@ -16,6 +16,8 @@
   path = require('path');
 
   _ = require('lodash');
+
+  querystring = require('querystring');
 
   queryStringIndicator = '__&__';
 
@@ -79,7 +81,7 @@
     strings = [];
     for (prop in params) {
       if (!__hasProp.call(params, prop)) continue;
-      strings.push("" + prop + "=" + params[prop]);
+      strings.push("" + (querystring.escape(prop)) + "=" + (querystring.escape(params[prop])));
     }
     if (strings.length === 0) {
       return '';
