@@ -1,5 +1,8 @@
 # Record and Play Back your API
 
+![api-vcr logo](https://raw.githubusercontent.com/SimplGy/api-vcr/master/api-vcr.jpg) 
+> Drawing credit: [dancingpirates](https://instagram.com/dancingpirates/)
+
 This records API responses so you can play them back later, quickly and reliably.
 
 If you're a front-end developer this means you can develop without an API server--even without the internet.
@@ -16,6 +19,7 @@ It's good for:
 
 This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay).
 Other projects might be better for your needs, but some things make this one different:
+
 * Other solutions are focused on testing. That's great and valid, but I want to **develop** against something fast, deterministic, and reliable, too.
 * This is written in Node, so it's easy to fit in with a front end developer's workflow.
 * I store the responses as plain text JSON files so you can modify them whenever you want, and see very clearly where I create bugs or mismatch your expectations on API paths.
@@ -143,8 +147,8 @@ You can bump the version with npm's awesome `npm version patch && npm publish`.
 - [x] Support missing objects (eg: if you have recorded `surfboard/3` and they request `5`, return `3` instead)
 - [x] Print version on startup
 - [x] Switch to a global install for easier run API by packages that depend on this one.
+- [x] Bug: encode colons to `%3A` or something else in filenames
 
-- [ ] Bug: encode colons to `%3A` or something else in filenames
 - [ ] Bug: returning similar siblings returns deep nested JSON if there is a child folder (eg: posts/777 returns posts/1/comments.json)
 - [ ] Bug: returning siblings shouldn't return list objects for id requests and visa-versa
 - [ ] Support a config file, maybe in `./api-vcr-config.json` (is there an option parsing library that supports fall-through from args to json file to defaults?)
