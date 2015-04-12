@@ -6,7 +6,7 @@
 
   config = {
     port: 59007,
-    rootPath: './.api-vcr-data',
+    rootPath: './api-vcr-data',
     sameSameSiblings: true,
     ignore: ['.DS_Store'],
     computeFilePath: function() {

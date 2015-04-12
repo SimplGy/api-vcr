@@ -1,4 +1,4 @@
 data/
-.api-vcr-data/
+api-vcr-data/
 .idea/
 node_modules/

@@ -2,7 +2,7 @@ fs = require 'fs-extra'
 
 config =
   port: 59007
-  rootPath: './.api-vcr-data'
+  rootPath: './api-vcr-data'
   sameSameSiblings: true              # If the exact object requested isn't available, should it return sibling ids? "Siblings are same same but different"
   ignore: [
     '.DS_Store'
