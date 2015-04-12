@@ -17,6 +17,18 @@ It's good for:
 * **Throttled APIs** (don't get shut down for querying too much while developing)
 * **Coordinating** with frequent back end changes that require 30 minutes of API downtime to rebuild and deploy (ahem).
 
+## How it Works
+
+This works by standing up a server in between your app and your API. If you have control over your app's API url, it's easy--just point it to `api-vcr` instead.
+
+![api-vcr architecture diagram](docs/architecture-diagram.png)
+
+If you have multiple API servers, no problem. You stand up an instance of the vcr for each one. Each VCR will have a different port so you set them up as different urls in your app, just like you're probably already doing.
+
+If you do not have control over the API server being requested (if you're using library code, for example), you can modify your `etc/hosts` file to accomplish the same flow. I'm thinking about a script to make this easier, but I have some security concerns and I'm not sure about the design. I don't want to mess up anybody's system.
+
+## Precedent
+
 This is similar to [some](https://github.com/vcr/vcr) [other](http://www.mock-server.com/) [projects](https://github.com/assaf/node-replay).
 Other projects might be better for your needs, but some things make this one different:
 
@@ -151,6 +163,10 @@ You can bump the version with npm's awesome `npm version patch && npm publish`.
 
 - [ ] Bug: returning similar siblings returns deep nested JSON if there is a child folder (eg: posts/777 returns posts/1/comments.json)
 - [ ] Bug: returning siblings shouldn't return list objects for id requests and visa-versa
+- [ ] Handle non JSON gracefully
+- [ ] Screenshot of requests, mapping to screenshot of files in finder
+- [ ] Script to add and remove from etc/hosts. (design? will this work?)
+- [ ] Chrome extension difficulty estimation. https://github.com/chrisaljoudi/uBlock. Dev tools tab, monitor xhr and check boxes for ones to record?
 - [ ] Support a config file, maybe in `./api-vcr-config.json` (is there an option parsing library that supports fall-through from args to json file to defaults?)
 - [ ] Print the fully resolved path name for data, otherwise it's unclear where `.` is
 - [ ] Have a simple index page with list of all routes we know about, for easy debugging/transparency
