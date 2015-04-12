@@ -19,10 +19,7 @@
     "api",
     "REST"
   ],
-  "author": {
-    "name": "Eric Miller",
-    "email": "hi@simple.gy"
-  },
+  "author": "@simplgy",
   "dependencies": {
     "express": "^4.12.3",
     "express-http-proxy": "^0.3.1",
