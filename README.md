@@ -9,6 +9,8 @@ If you're a front-end developer this means you can develop without an API server
 
 You can also write tests for front end components that have some API dependencies but shouldn't break if the API server has hiccups.
 
+This is a node app with no database dependency. It's easy to integrate with `grunt` or `gulp`, or use from the command line.
+
 It's good for:
 
 * **Testing** (Responses are always the same, and fast)
@@ -26,6 +28,10 @@ This works by standing up a server in between your app and your API. If you have
 If you have multiple API servers, no problem. You stand up an instance of the vcr for each one. Each VCR will have a different port so you set them up as different urls in your app, just like you're probably already doing.
 
 If you do not have control over the API server being requested (if you're using library code, for example), you can modify your `etc/hosts` file to accomplish the same flow. I'm thinking about a script to make this easier, but I have some security concerns and I'm not sure about the design. I don't want to mess up anybody's system.
+
+Whenever you make reqeuests to api-vcr in `--record` mode, it passes the request on to your destination api server and records the response. You can see JSON files for your recorded responses in finder any time:
+
+![api-vcr json files in finder](docs/json-in-finder.png)
 
 ## Precedent
 
@@ -52,9 +58,7 @@ This is actually why [grunt-cli](https://github.com/gruntjs/grunt-cli) exists, I
 
 ## Quick Start Guide
 
-First let's launch in record mode so we can pass through requests and record the responses.
-
-To run in record mode:
+First let's launch in `--record` mode so we can pass through requests and record the responses:
 
     api-vcr http://jsonplaceholder.typicode.com/ --record
 
@@ -64,8 +68,6 @@ In a browser, you can drop in these urls, or any from the [jsonplaceholder api](
 
 * [http://localhost:59007/users](http://localhost:59007/users)
 * [http://localhost:59007/users/1](http://localhost:59007/users/1)
-* [http://localhost:59007/posts](http://localhost:59007/posts)
-* [http://localhost:59007/posts/1](http://localhost:59007/posts/1)
 * [http://localhost:59007/posts/2](http://localhost:59007/posts/2)
 * [http://localhost:59007/posts/1/comments](http://localhost:59007/posts/1/comments)
 
@@ -73,73 +75,65 @@ For each request, the VCR will create a single JSON file, using the request info
 
 For example, the request:
 
-    GET http://localhost:59007/posts/1/comments
+    GET http://localhost:59007/users/1
 
 Is mapped to the file:
 
-    ./api-vcr-data/jsonplaceholder.typicode.com/80/posts/1/comments.json
+    ./api-vcr-data/jsonplaceholder.typicode.com/80/users/1.json
 
-After making requests to localhost with the recorder running, you should see the log saying that files are being written,
-and you should be able to explore a tree of easy to see, editable JSON files. You can change these manually if you want.
-Be aware the recorder will overwrite them if you run it again later.
-
-Go ahead and kill the server now. `Ctrl+C`.
-
-Armed with recorded data, you're ready to run in offline mode.
+After recording a little, you can stop the server with `Ctrl+C`. Armed with recorded data, you're ready to run in offline playback mode.
 
     api-vcr http://jsonplaceholder.typicode.com
 
-Now any request you've previously recorded returns instantly from disk:
+Now any request you've previously recorded returns instantly and reliably from disk:
 
+* [http://localhost:59007/users](http://localhost:59007/users)
 * [http://localhost:59007/users/1](http://localhost:59007/users/1)
-* [http://localhost:59007/posts](http://localhost:59007/posts)
 
 Similar requests you haven't recorded yet return their best guess:
 
-* [http://localhost:59007/users/777](http://localhost:59007/users/777)
+* [http://localhost:59007/users/9999](http://localhost:59007/users/9999)
 
-Totally new requests 404:
+Totally new requests return a 404:
 
 * [http://localhost:59007/the/rain/in/spain](http://localhost:59007/the/rain/in/spain)
 
 
 ## Options
 
+### `--port`
+
+    api-vcr http://myapi.com:8080 --port=1337
+
 You can specify a port for the vcr server to listen on.
 This is useful for running more than once instance.
 The port of the API server is used by default (unless that port is 80),
 this makes keeping proxies straight a little easier if you have remote APIs identified only by port number.
 
-Set the port:
-
-    api-vcr http://myapi.com:8080 --port=1337
-
-By default, data is stored wherever you run the command. If you always run the command from your project dir, this works well.
-
-You can also set a hard-coded data path:
+### `--data`
 
     api-vcr http://myapi.com:8080 --data=~/sites/myApp/testData
+
+By default, data is stored wherever you run the command. If you always run the command from your project dir, this works well. You can also set a hard-coded data path.
+
+
+### `--noSiblings`
+
+    api-vcr http://myapi.com:8080 --noSiblings
 
 By default the vcr looks for a sibling if it can't find a requested object. If you ask for `user/7`, for example, it will return `user/42` if it has one.
 This is awesome if you just want to keep working and it doesn't matter too much that it's the wrong user/product/sprocket/whatever.
 
-Not everyone wants this behavior though. To turn it off:
-
-    api-vcr http://myapi.com:8080 --noSiblings
+Not everyone wants this behavior though, so this option lets you turn it off.
 
 
 ## Seeding data
 
-Data is all in the `./api-vcr-data` folder local to where you run the command.
+Data is all in the `./api-vcr-data` folder local to where you run the command, or where you configure it with the `--data` option. If you run this as a build task inside your project this works well--your api data is stored with your project.
 
-This is configurable, so you can store your data files with your project if you want to.
+You can create or modify data at will and distribute it in git with your project for consistent testing and front-end development across machines.
 
-Folder and file names are used to determine the api path the VCR playback should respond to.
-If you'd like the server to respond to `users/1`, create this file:
-
-    ./users/1.json
-
-You can record and modify, or seed from scratch, a complex tree of test data and distribute it in git with your project for consistent testing across machines.
+Please be aware that if you run in record mode, it will overwrite any file with the same name, so if you make extensive manual edits to the data you should protect them.
 
 
 ## Developing
