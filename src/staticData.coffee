@@ -52,6 +52,8 @@ get = (req, res, next) ->
       console.log "  Unhandled error", { err: err, data: data }
       next()
     else
+      res.setHeader 'Access-Control-Allow-Methods', 'GET'
+      res.setHeader 'Access-Control-Allow-Origin', '*'
       res.send data
       next()
 
